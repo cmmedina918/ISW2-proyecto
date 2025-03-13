@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block Title %}
+	Crear nuevo turno
+{% endblock %}
+{% block Body %}
+    <form action="{% url 'nuevoTurno' %}" method="post">
+        <div class="form-container">
+            <h3>Registra un nuevo turno</h3>
+            <br>
+            <div class="formInner">
+                {% csrf_token %}
+                <br>
+                <table class="form-table">
+                    {{ form.as_table }}
+                </table>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-success">Enviar</button>
+        </div>
+    </form>
+{% endblock %}

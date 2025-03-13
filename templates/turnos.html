@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block Title %}
+    Lista de turnos
+{% endblock %}
+{% block Body %}
+    <div class="container mt-5">
+	    <h3>Turnos Pendientes</h3>
+        <br>
+        <table class="table table-bordered" >
+            <thead class="table-dark">
+                <tr>
+                    <td>Nombre</td>
+                    <td>Nro. Cédula</td>
+                    <td>Nro. Seguro</td>
+                    <td>Fecha del turno</td>
+                    <td>Médico</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for turno in turnos %}
+                    <tr>
+                        <td>{{ turno.nombre }}</td>
+                        <td>{{ turno.ci }}</td>
+                        <td>{{ turno.nro_seguro }}</td>
+                        <td>{{ turno.fecha_turno }}</td>
+                        <td>{{ turno.medico }}</td>
+                        <td>
+                            <a class="btn btn-warning" href="#">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a class="btn btn-danger" href="#">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

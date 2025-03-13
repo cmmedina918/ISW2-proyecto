@@ -3,10 +3,10 @@
 }
 .navbar{
     padding: 10px 0;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
  }
 
 .nav-list {
@@ -29,12 +29,12 @@
 }
 
 .nav-list a:hover {
-  background-color: #3498db;
+  /*background-color: #3498db;*/
   border-radius: 4px;
 }
 
 .nav-list a:active {
-  background-color: #2980b9;
+  /*background-color: #2980b9;*/
 }
 .formInner{
     display: flex;

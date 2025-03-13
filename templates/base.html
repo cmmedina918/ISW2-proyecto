@@ -4,6 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
         <title>
             {% block Title %}{% endblock %}
         </title>
@@ -12,5 +13,6 @@
         {% include 'nav.html' %}
         {% block Body %}{% endblock %}
         {% include 'footer.html' %}
+        <script src="{% static 'bootstrap-5.3.3-dist/js/bootstrap.min.js' %}"></script>
     </body>
 </html>

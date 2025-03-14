@@ -3,8 +3,13 @@
     Lista de turnos
 {% endblock %}
 {% block Body %}
-    <div class="container mt-5">
-	    <h3>Turnos Pendientes</h3>
+    <div class="container mt-5" id="container-list">
+        <div class="flex ">
+            <h3>Turnos Pendientes</h3>
+            <a class="btn btn-success" href="{% url 'nuevoTurno' %}">
+                <i class="bi bi-plus"></i>
+            </a>
+        </div>
         <br>
         <table class="table table-bordered" >
             <thead class="table-dark">
@@ -26,7 +31,7 @@
                         <td>{{ turno.fecha_turno }}</td>
                         <td>{{ turno.medico }}</td>
                         <td>
-                            <a class="btn btn-warning" href="#">
+                            <a class="btn btn-warning" href="{% url 'finalizarTurno' turno.id %}">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
                             <a class="btn btn-danger" href="#">

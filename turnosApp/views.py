@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import Turno
 
@@ -17,5 +17,11 @@ def nuevoTurno(request):
         return render(request, 'forms/turno.html', {'form': form})
 
 def turnosView(request):
-    turnosList = Turno.objects.all()
+    turnosList = Turno.objects.all().filter(status=0)
     return render(request, 'turnos.html',{'turnos': turnosList})
+
+def finalizarTurno(request, turnoId):
+    turno = get_object_or_404(Turno, id=turnoId)
+    turno.status = 1
+    turno.save()
+    return redirect('turnosList')

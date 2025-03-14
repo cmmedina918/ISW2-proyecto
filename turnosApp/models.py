@@ -24,7 +24,7 @@ class Turno(models.Model):
     nro_seguro = models.CharField(max_length=20, null=False)
     fecha_registro = models.DateTimeField(default=now, null=False)
     fecha_turno = models.DateField( null=False)
+    status = models.IntegerField(null=False, default=0)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
-
     def __str__(self):
         return self.nombre

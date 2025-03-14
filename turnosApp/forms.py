@@ -14,7 +14,7 @@ class especialidadesForm(forms.ModelForm):
 class turnoForm(forms.ModelForm):
     class Meta:
         model = Turno
-        exclude = ['fecha_registro', 'id']
+        exclude = ['fecha_registro', 'id','status']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control m-1', 'placeholder': 'Nombre del paciente'}),
             'ci': forms.TextInput(attrs={'class': 'form-control m-1', 'placeholder': 'Cédula de identidad'}),

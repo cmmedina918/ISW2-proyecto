@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block Title %}
+    Turnos finalizados
+{% endblock %}
+{% block Body %}
+    <div class="container mt-5" id="container-list">
+        <div class="d-flex justify-content-between">
+            <h2>Turnos finalizados</h2>
+{#            <a class="btn btn-success" href="{% url 'nuevoTurno' %}">#}
+{#                <i class="bi bi-plus"></i>#}
+{#            </a>#}
+        </div>
+        <br>
+        <table class="table table-bordered" >
+            <thead class="table-dark">
+                <tr>
+                    <td>Nombre</td>
+                    <td>Nro. Cédula</td>
+                    <td>Nro. Seguro</td>
+                    <td>Fecha del turno</td>
+{#                    <td>Médico</td>#}
+{#                    <td>Acciones</td>#}
+                </tr>
+            </thead>
+            <tbody>
+                {% for turno in turnos %}
+                    <tr>
+                        <td>{{ turno.nombre }}</td>
+                        <td>{{ turno.ci }}</td>
+                        <td>{{ turno.nro_seguro }}</td>
+                        <td>{{ turno.fecha_turno }}</td>
+{#                        <td>{{ turno.medico }}</td>#}
+{#                        <td>#}
+{#                            <a class="btn btn-warning"#}
+{#                               href="{% url 'finalizarTurno' turno.id %}"#}
+{#                               onclick=" return confirm('¿Estás seguro de que quieres finalizar este turno?');"#}
+{#                            >#}
+{#                                Finalizar turno#}
+{#                            </a>#}
+{#                            <a class="btn btn-danger" href="#">#}
+{#                                <i class="bi bi-trash-fill"></i>#}
+{#                            </a>#}
+{#                        </td>#}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-dark" href="{% url 'turnosList' %}">Ver turnos pendientes</a>
+    </div>
+{% endblock %}

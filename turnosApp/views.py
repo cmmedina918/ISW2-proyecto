@@ -16,9 +16,13 @@ def nuevoTurno(request):
         form = turnoForm()
         return render(request, 'forms/turno.html', {'form': form})
 
-def turnosView(request):
-    turnosList = Turno.objects.all().filter(status=0)
-    return render(request, 'turnos.html',{'turnos': turnosList})
+def turnosPendientesView(request):
+    turnosList = Turno.objects.all().filter(status=0).order_by('fecha_turno')
+    return render(request, 'turnosPendientes.html', {'turnos': turnosList})
+
+def turnosFinalizadosView(request):
+    turnosList = Turno.objects.all().filter(status=1).order_by('fecha_turno')
+    return render(request, 'turnosFinalizados.html', {'turnos': turnosList})
 
 def finalizarTurno(request, turnoId):
     turno = get_object_or_404(Turno, id=turnoId)

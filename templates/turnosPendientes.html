@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block Title %}
-    Lista de turnos
+    Turnos pendientes
 {% endblock %}
 {% block Body %}
     <div class="container mt-5" id="container-list">
-        <div class="flex ">
-            <h3>Turnos Pendientes</h3>
+        <div class="d-flex justify-content-between">
+            <h2>Turnos pendientes</h2>
             <a class="btn btn-success" href="{% url 'nuevoTurno' %}">
                 <i class="bi bi-plus"></i>
             </a>
@@ -18,7 +18,7 @@
                     <td>Nro. Cédula</td>
                     <td>Nro. Seguro</td>
                     <td>Fecha del turno</td>
-                    <td>Médico</td>
+{#                    <td>Médico</td>#}
                     <td>Acciones</td>
                 </tr>
             </thead>
@@ -29,18 +29,22 @@
                         <td>{{ turno.ci }}</td>
                         <td>{{ turno.nro_seguro }}</td>
                         <td>{{ turno.fecha_turno }}</td>
-                        <td>{{ turno.medico }}</td>
+{#                        <td>{{ turno.medico }}</td>#}
                         <td>
-                            <a class="btn btn-warning" href="{% url 'finalizarTurno' turno.id %}">
-                                <i class="bi bi-pencil-fill"></i>
+                            <a class="btn btn-warning"
+                               href="{% url 'finalizarTurno' turno.id %}"
+                               onclick=" return confirm('¿Estás seguro de que quieres finalizar este turno?');"
+                            >
+                                Finalizar turno
                             </a>
-                            <a class="btn btn-danger" href="#">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
+{#                            <a class="btn btn-danger" href="#">#}
+{#                                <i class="bi bi-trash-fill"></i>#}
+{#                            </a>#}
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <a class="btn btn-dark" href="{% url 'turnosFinalizados' %}">Ver turnos finalizados</a>
     </div>
 {% endblock %}

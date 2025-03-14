@@ -20,6 +20,7 @@ class turnoForm(forms.ModelForm):
             'ci': forms.TextInput(attrs={'class': 'form-control m-1', 'placeholder': 'Cédula de identidad'}),
             'nro_seguro': forms.TextInput(attrs={'class': 'form-control m-1', 'placeholder': 'Número de seguro'}),
             'fecha_turno': forms.DateInput(attrs={'class': 'form-control m-1', 'type': 'date'}),
+            'estado': forms.Select(attrs={'class': 'form-control m-1'}),
             'medico': forms.Select(attrs={'class': 'form-control dropdown m-1'}),
         }
         labels = {

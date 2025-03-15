@@ -7,4 +7,5 @@ urlpatterns = [
     path('turnos/', views.turnosPendientesView, name='turnosList'),
     path('turnosFinalizados/', views.turnosFinalizadosView, name='turnosFinalizados'),
     path('finalizarTurno/<int:turnoId>', views.finalizarTurno, name='finalizarTurno'),
+    path('filtrar-medicos/', views.filtrar_medicos, name='filtrar_medicos'),
 ]

@@ -1,6 +1,7 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
-from .models import Turno
+from .models import Turno, Medico
 
 # Create your views here.
 def index(request):
@@ -29,3 +30,14 @@ def finalizarTurno(request, turnoId):
     turno.status = 1
     turno.save()
     return redirect('turnosList')
+
+
+def filtrar_medicos(request):
+    especialidad_id = request.GET.get('especialidad_id')
+
+    if especialidad_id:
+        medicos = Medico.objects.filter(especialidades__id=especialidad_id).values('id', 'nombre')
+    else:
+        medicos = Medico.objects.all().values('id', 'nombre')
+
+    return JsonResponse(list(medicos), safe=False)

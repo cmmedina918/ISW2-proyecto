@@ -3,10 +3,10 @@ from cProfile import label
 from django import forms
 from .models import *
 
-class especialidadesForm(forms.ModelForm):
-    class Meta:
-        model = Especialidad
-        fields = '__all__'
+# class especialidadesForm(forms.ModelForm):
+#     class Meta:
+#         model = Especialidad
+#         fields = '__all__'
 
 # class medicosForm(forms.ModelForm):
 #     class Meta:
@@ -17,40 +17,24 @@ class turnoForm(forms.ModelForm):
     class Meta:
 
         model = Turno
-        fields = ['nombre','ci','sexo','nro_telefono','ciudad','nro_seguro','fecha_turno','especialidad','medico']
+        fields = ['paciente','observaciones','fecha_turno','especialidad','medico']
         exclude = ['fecha_registro', 'id','status']
         widgets = {
-            'nombre': forms.TextInput(
-                attrs={'class': 'form-control m-2 ',
-                       'placeholder': 'Nombre del paciente'}),
-            'ci': forms.NumberInput(
-                attrs={'class': 'form-control m-2 numeric-field',
-                       'placeholder': 'Cédula de identidad',
-                       'min': '1'}),
-            'sexo': forms.Select(
-                attrs={'class': 'form-control dropdown m-2'}),
-            'nro_telefono': forms.NumberInput(
-                attrs={'class': 'form-control m-2',
-                       'placeholder': 'Número de telefono',
-                       'min': '1'}),
-            'ciudad': forms.TextInput(
-                attrs={'class': 'form-control m-2', 'placeholder': 'Ciudad'}),
-            'nro_seguro': forms.NumberInput(
-                attrs={'class': 'form-control m-2',
-                       'placeholder': 'Número de seguro'}),
+            'paciente': forms.TextInput(
+                attrs={'class': 'form-control m-2'}),
             'fecha_turno': forms.DateInput(
                 attrs={'class': 'form-control m-2', 'type': 'date'}),
             'estado': forms.Select(
                 attrs={'class': 'form-control m-2'}),
             'medico': forms.Select(
                 attrs={'class': 'form-control dropdown m-2','placeholder':'Seleccione un medico'}),
+            'observaciones': forms.TextInput(
+                attrs={'class': 'form-control m-2'}
+            )
         }
         labels = {
             'medico' : 'Seleccione un médico',
-            'ci' : 'Número de cédula',
-            'nro_seguro' : 'Número de seguro',
-            'nro_telefono': 'Número de telefono',
-            'sexo': 'Selecione su sexo',
+            'paciente': 'Ingrese su codigo de paciente',
         }
 
     especialidad = forms.ModelChoiceField(
@@ -63,4 +47,40 @@ class turnoForm(forms.ModelForm):
         ),
         required=True
 
+    )
+
+class pacienteForm(forms.ModelForm):
+    OPCIONES_CONTACTO = [
+        (False, 'Teléfono'),
+        (True, 'Email')
+    ]
+
+    class Meta:
+
+        model = Paciente
+        fields = ['nombre', 'ci', 'sexo', 'conacto', 'tipo_contacto',]
+        exclude = [ 'id', 'status']
+        widgets = {
+            'nombre': forms.TextInput(
+                attrs={'class': 'form-control m-2'}),
+            'ci': forms.TextInput(
+                attrs={'class': 'form-control m-2'}),
+            'sexo': forms.Select(
+                attrs={'class': 'form-control m-2'}),
+            'conacto': forms.TextInput(
+                attrs={'class': 'form-control m-2'}),
+        }
+        labels = {
+            'ci' : 'Número de cédula',
+            'nro_seguro' : 'Número de seguro',
+            'nro_telefono': 'Número de telefono',
+            'sexo': 'Selecione su sexo',
+        }
+
+    tipo_contacto = forms.BooleanField(
+        widget = forms.RadioSelect(
+            choices=OPCIONES_CONTACTO,
+            attrs={'class': 'm-2',
+                   'type':'radio'}),
+        required = True
     )

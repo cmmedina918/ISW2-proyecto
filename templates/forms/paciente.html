@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block Title %}
+	Registro de Pacientes
+{% endblock %}
+{% block Body %}
+    <form action="{% url 'nuevoPaciente' %}" method="post">
+        <div class="form-container">
+            <h3>Registra un nuevo paciente</h3>
+            <br>
+            <div class="formInner">
+                {% csrf_token %}
+                <br>
+                <table class="form-table text-start">
+                    {{ form.as_table }}
+                </table>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-success">Enviar</button>
+        </div>
+    </form>
+{% endblock %}

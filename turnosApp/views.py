@@ -41,3 +41,23 @@ def filtrar_medicos(request):
         medicos = Medico.objects.all().values('id', 'nombre')
 
     return JsonResponse(list(medicos), safe=False)
+
+def nuevoPaciente(request):
+    if request.method == 'POST':
+        form = pacienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('pacientes')
+    else:
+        form = pacienteForm()
+        return render(request, 'forms/paciente.html', {'form': form})
+
+def pacientes(request):
+    pacienteList = Paciente.objects.all().filter(status=0)
+    return render(request, 'pacientes.html', {'pacientes': pacienteList})
+
+def deactivatePaciente(request, pacienteId):
+    paciente = get_object_or_404(Paciente, id=pacienteId)
+    paciente.status = 1
+    paciente.save()
+    return redirect('pacientes')

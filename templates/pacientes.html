@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block Title %}
+	Pacientes
+{% endblock %}
+{% block Body %}
+    <div class="container mt-5" id="container-list">
+        <div class="d-flex justify-content-between">
+            <h2>Turnos pendientes</h2>
+            <a class="btn btn-success" href="{% url 'nuevoPaciente' %}">
+                <i class="bi bi-plus"></i>
+            </a>
+        </div>
+        <br>
+        <table class="table table-bordered" >
+            <thead class="table-dark">
+                <tr>
+                    <td>ID</td>
+                    <td>Nombre</td>
+                    <td>Nro. Cédula</td>
+                    <td>Sexo</td>
+                    <td>Contacto</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente in pacientes %}
+                    <tr>
+                        <td>{{ paciente.id }}</td>
+                        <td>{{ paciente.nombre }}</td>
+                        <td>{{ paciente.ci }}</td>
+                        <td>{{ paciente.sexo }}</td>
+                        <td>{{ paciente.conacto }}</td>
+                        <td>
+                            <a class="btn btn-warning"
+                               href="{% url 'deactivatePaciente' paciente.id %}"
+                               onclick=" return confirm('¿Estás seguro de que quieres eliminar este paciente?');"
+                            >
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                            <a class="btn btn-danger" href="#">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

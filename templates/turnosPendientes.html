@@ -16,7 +16,6 @@
                 <tr>
                     <td>Nombre</td>
                     <td>Nro. Cédula</td>
-                    <td>Nro. Seguro</td>
                     <td>Fecha del turno</td>
 {#                    <td>Médico</td>#}
                     <td>Acciones</td>
@@ -25,9 +24,8 @@
             <tbody>
                 {% for turno in turnos %}
                     <tr>
-                        <td>{{ turno.nombre }}</td>
-                        <td>{{ turno.ci }}</td>
-                        <td>{{ turno.nro_seguro }}</td>
+                        <td>{{ turno.paciente.nombre }}</td>
+                        <td>{{ turno.paciente.ci }}</td>
                         <td>{{ turno.fecha_turno }}</td>
 {#                        <td>{{ turno.medico }}</td>#}
                         <td>

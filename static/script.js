@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
         medicoDropdown.innerHTML = '<option value="">Cargando...</option>';
 
         if (especialidadId) {
-            // Usamos `window.location.origin` para asegurarnos que la URL sea correcta
+
             const url = `${window.location.origin}/turnos/filtrar-medicos/?especialidad_id=${especialidadId}`;
 
             fetch(url)

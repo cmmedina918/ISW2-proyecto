@@ -48,3 +48,7 @@
     text-align: center;
     height: 100vh;
 }
+
+#id_ci{
+    appearance: textfield; !important;
+}

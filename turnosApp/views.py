@@ -1,3 +1,4 @@
+from datetime import date
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
@@ -13,9 +14,13 @@ def nuevoTurno(request):
         if form.is_valid():
             form.save()
             return redirect('turnosList')
+        else:
+            return render(request, "forms/turno.html",
+                          {"form": form})
     else:
         form = turnoForm()
-        return render(request, 'forms/turno.html', {'form': form})
+
+    return render(request, 'forms/turno.html', {'form': form})
 
 def turnosPendientesView(request):
     turnosList = Turno.objects.all().filter(status=0).order_by('fecha_turno')
@@ -48,9 +53,12 @@ def nuevoPaciente(request):
         if form.is_valid():
             form.save()
             return redirect('pacientes')
+        else:
+            return render(request, 'forms/paciente.html', {'form': form})
     else:
         form = pacienteForm()
-        return render(request, 'forms/paciente.html', {'form': form})
+
+    return render(request, 'forms/paciente.html', {'form': form})
 
 def pacientes(request):
     pacienteList = Paciente.objects.all().filter(status=0)

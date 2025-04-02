@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Especialidad(models.Model):
@@ -33,15 +34,15 @@ class Paciente(models.Model):
     sexo = models.ForeignKey(Sexo, on_delete=models.CASCADE)
     conacto = models.CharField(max_length=100, null=False)
     tipo_contacto = models.BooleanField(default=False, null=False)
+    ciudad = models.CharField(max_length=50, null=True)
     status = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return self.nombre
+        return self.ci
 
 class Turno(models.Model):
 
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    ciudad = models.CharField(max_length=50, null=True)
     fecha_registro = models.DateTimeField(default=now, null=False)
     fecha_turno = models.DateField( null=False)
     status = models.IntegerField(null=False, default=0)
@@ -49,4 +50,5 @@ class Turno(models.Model):
     observaciones = models.TextField(null=True)
 
     def __str__(self):
-        return self.paciente
+        return self.paciente.nombre
+

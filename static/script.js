@@ -33,3 +33,26 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    let errorContainer = document.getElementById("django-errors");
+    let errorToastEl = document.getElementById("errorToast");
+    let errorList = document.getElementById("error-list");
+
+    if (errorContainer) {
+        let errors = errorContainer.getAttribute("data-errors");
+
+        if (errors) {
+            let errorArray = errors.split("|").filter(e => e.trim() !== "");
+            errorList.innerHTML = "";
+
+            errorArray.forEach(error => {
+                let li = document.createElement("li");
+                li.textContent = error;
+                errorList.appendChild(li);
+            });
+
+            let errorToast = new bootstrap.Toast(errorToastEl);
+            errorToast.show();
+        }
+    }
+});

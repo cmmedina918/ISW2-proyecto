@@ -11,11 +11,40 @@
                 {% csrf_token %}
                 <br>
                 <table class="form-table text-start">
-                    {{ form.as_table }}
+                    {% for field in form %}
+                        <tr>
+                            <td>{{ field.label_tag }}</td>
+                            <td>{{ field }}</td>
+                        </tr>
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <tr class="d-none django-error">
+                                    <td colspan="2">{{ error }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
                 </table>
             </div>
             <br>
             <button type="submit" class="btn btn-success">Enviar</button>
         </div>
     </form>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="errorToast" class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-white">
+                <strong class="me-auto">Error</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <ul id="error-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pasamos errores de Django a un div oculto -->
+    <div id="django-errors" data-errors="{% for field, errors in form.errors.items %}{% for error in errors %}{{ error }}|{% endfor %}{% endfor %}" hidden></div>
+
+
 {% endblock %}

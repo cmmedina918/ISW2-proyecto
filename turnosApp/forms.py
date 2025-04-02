@@ -1,4 +1,5 @@
 from cProfile import label
+from datetime import date
 
 from django import forms
 from .models import *
@@ -23,11 +24,11 @@ class turnoForm(forms.ModelForm):
             'paciente': forms.TextInput(
                 attrs={'class': 'form-control m-2'}),
             'fecha_turno': forms.DateInput(
-                attrs={'class': 'form-control m-2', 'type': 'date'}),
+                attrs={'class': 'form-control m-2', 'type': 'date', 'min': date.today().isoformat()}),
             'estado': forms.Select(
                 attrs={'class': 'form-control m-2'}),
             'medico': forms.Select(
-                attrs={'class': 'form-control dropdown m-2','placeholder':'Seleccione un medico'}),
+                attrs={'class': 'form-control dropdown m-2','placeholder' : 'Seleccione un medico'}),
             'observaciones': forms.TextInput(
                 attrs={'class': 'form-control m-2'}
             )
@@ -46,8 +47,28 @@ class turnoForm(forms.ModelForm):
                    'placeholder': 'Seleccione una especialidad'}
         ),
         required=True
-
     )
+    def clean(self):
+        cleaned_data = super().clean()
+        paciente_ci = cleaned_data.get("paciente")
+        fecha = cleaned_data.get("fecha_turno")
+        medico_nombre = cleaned_data.get("medico")
+        paciente_obj = Paciente.objects.get(ci = paciente_ci)
+        medico_obj = Medico.objects.get(nombre = medico_nombre)
+
+        if (Turno.objects.filter(paciente_id = paciente_obj.id, fecha_turno = fecha, medico_id = medico_obj.id, status = 0)
+                .count() > 0):
+            raise forms.ValidationError(f"El paciente {paciente_obj.id} ya tiene un "
+                                        f"turno con el médico {medico_nombre} para la "
+                                        f"fecha seleccionada")
+        if not Paciente.objects.filter(ci = paciente_ci).exists():
+            raise forms.ValidationError("El codigo de paciente introducido es incorrecto.")
+
+        if fecha < date.today():
+            raise forms.ValidationError("No puedes seleccionar una fecha pasada.")
+
+        return cleaned_data
+
 
 class pacienteForm(forms.ModelForm):
     OPCIONES_CONTACTO = [
@@ -58,12 +79,14 @@ class pacienteForm(forms.ModelForm):
     class Meta:
 
         model = Paciente
-        fields = ['nombre', 'ci', 'sexo', 'conacto', 'tipo_contacto',]
+        fields = ['nombre', 'ci', 'sexo', 'conacto','ciudad', 'tipo_contacto',]
         exclude = [ 'id', 'status']
         widgets = {
             'nombre': forms.TextInput(
                 attrs={'class': 'form-control m-2'}),
             'ci': forms.TextInput(
+                attrs={'class': 'form-control m-2'}),
+            'ciudad': forms.TextInput(
                 attrs={'class': 'form-control m-2'}),
             'sexo': forms.Select(
                 attrs={'class': 'form-control m-2'}),
@@ -84,3 +107,9 @@ class pacienteForm(forms.ModelForm):
                    'type':'radio'}),
         required = True
     )
+
+    def clean_ci(self):
+        ci = self.cleaned_data.get("ci")
+        if Paciente.objects.filter(ci = ci).exists():
+            raise forms.ValidationError("Este número de cédula ya está registrado.")
+        return ci

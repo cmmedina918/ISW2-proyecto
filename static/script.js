@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     medicoDropdown.innerHTML = '<option value="">Seleccione un médico</option>';
                     data.forEach(medico => {
-                        medicoDropdown.innerHTML += `<option value="${medico.id}">${medico.nombre}</option>`;
+                        medicoDropdown.innerHTML += `<option value="${medico.user_id}">${medico.nombre_completo}</option>`; // Usamos medico.user_id
                     });
                 })
                 .catch(error => {

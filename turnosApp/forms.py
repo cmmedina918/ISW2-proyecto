@@ -1,4 +1,3 @@
-from cProfile import label
 from datetime import date
 
 from django import forms
@@ -52,23 +51,37 @@ class turnoForm(forms.ModelForm):
         cleaned_data = super().clean()
         paciente_ci = cleaned_data.get("paciente")
         fecha = cleaned_data.get("fecha_turno")
-        medico_nombre = cleaned_data.get("medico")
-        paciente_obj = Paciente.objects.get(ci = paciente_ci)
-        medico_obj = Medico.objects.get(nombre = medico_nombre)
+        medico_user = cleaned_data.get("medico")  # Ahora obtenemos el User asociado al médico
 
-        if (Turno.objects.filter(paciente_id = paciente_obj.id, fecha_turno = fecha, medico_id = medico_obj.id, status = 0)
-                .count() > 0):
-            raise forms.ValidationError(f"El paciente {paciente_obj.id} ya tiene un "
-                                        f"turno con el médico {medico_nombre} para la "
-                                        f"fecha seleccionada")
-        if not Paciente.objects.filter(ci = paciente_ci).exists():
-            raise forms.ValidationError("El codigo de paciente introducido es incorrecto.")
+        if paciente_ci is None or fecha is None or medico_user is None:
+            return cleaned_data  # Algún campo requerido no está presente aún
+
+        try:
+            paciente_obj = Paciente.objects.get(ci=paciente_ci)
+        except Paciente.DoesNotExist:
+            raise forms.ValidationError("El código de paciente introducido es incorrecto.")
+
+        try:
+            medico_obj = Medico.objects.get(user=medico_user)  # Obtenemos el objeto Medico usando el User
+        except Medico.DoesNotExist:
+            raise forms.ValidationError("El médico seleccionado no es válido.")
+
+        if (Turno.objects.filter(
+            paciente=paciente_obj,  # Usamos el objeto Paciente directamente
+            fecha_turno=fecha,
+            medico=medico_obj,      # Usamos el objeto Medico directamente
+            status=0
+        ).count() > 0):
+            raise forms.ValidationError(
+                f"El paciente {paciente_obj.ci} ya tiene un "
+                f"turno con el médico {medico_obj.user.first_name} {medico_obj.user.last_name} para la "
+                f"fecha seleccionada"
+            )
 
         if fecha < date.today():
             raise forms.ValidationError("No puedes seleccionar una fecha pasada.")
 
         return cleaned_data
-
 
 class pacienteForm(forms.ModelForm):
     OPCIONES_CONTACTO = [

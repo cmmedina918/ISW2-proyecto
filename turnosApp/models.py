@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
@@ -5,20 +6,21 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 class Especialidad(models.Model):
 
-    nombre = models.CharField(max_length= 100, null= False)
+    nombre = models.CharField(max_length = 100, null = False)
 
     def __str__(self):
         return self.nombre
 
 class Medico(models.Model):
 
-    nombre = models.CharField(max_length= 100, null=False )
-    nro_matricula = models.CharField(max_length= 50, null=False )
-    telefono = models.CharField(max_length=20)
-    especialidades = models.ManyToManyField(Especialidad, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    nro_matricula = models.CharField(max_length=50, null=False, unique=True)
+    nro_cedula = models.CharField(max_length=20, null=False, default="0000", unique=True)
+    telefono = models.CharField(max_length=20, blank=True)
+    especialidades = models.ManyToManyField('Especialidad', blank=True) # Ajusta si es necesario
 
     def __str__(self):
-        return self.nombre
+        return self.user.get_full_name() or self.user.username
 
 class Sexo(models.Model):
 

@@ -1,7 +1,10 @@
 from datetime import date
+
+from django.db.models.functions import Concat
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
+from django.db.models import Value, CharField
 from .models import Turno, Medico
 
 # Create your views here.
@@ -15,12 +18,15 @@ def nuevoTurno(request):
             form.save()
             return redirect('turnosList')
         else:
-            return render(request, "forms/turno.html",
-                          {"form": form})
+            return render(request,
+                          "forms/turno.html",
+                          {'form': form})
     else:
         form = turnoForm()
 
-    return render(request, 'forms/turno.html', {'form': form})
+    return render(request,
+                  'forms/turno.html',
+                  {'form': form})
 
 def turnosPendientesView(request):
     turnosList = Turno.objects.all().filter(status=0).order_by('fecha_turno')
@@ -41,9 +47,13 @@ def filtrar_medicos(request):
     especialidad_id = request.GET.get('especialidad_id')
 
     if especialidad_id:
-        medicos = Medico.objects.filter(especialidades__id=especialidad_id).values('id', 'nombre')
+        medicos = Medico.objects.filter(especialidades__id=especialidad_id).annotate(
+            nombre_completo=Concat('user__first_name', Value(' '), 'user__last_name', output_field=CharField())
+        ).values('user_id', 'nombre_completo')  # Usamos 'user_id'
     else:
-        medicos = Medico.objects.all().values('id', 'nombre')
+        medicos = Medico.objects.all().annotate(
+            nombre_completo=Concat('user__first_name', Value(' '), 'user__last_name', output_field=CharField())
+        ).values('user_id', 'nombre_completo')  # Usamos 'user_id'
 
     return JsonResponse(list(medicos), safe=False)
 

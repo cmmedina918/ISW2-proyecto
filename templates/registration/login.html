@@ -1,0 +1,89 @@
+{% extends 'base.html' %} {% block title %}Iniciar Sesión{% endblock %}
+
+{% block Body %}
+    <form method="post" action="{% url 'login' %}">
+        <div class="form-container">
+            <br>
+            <h3>Iniciar Sesión</h3>
+            <br>
+            <div class="formInner">
+                {% csrf_token %}
+                <br>
+                <table class="form-table text-start">
+                    {% for field in form %}
+                        <tr>
+                            <td>{{ field.label_tag }}</td>
+                            <td>{{ field }}</td>
+                        </tr>
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <tr class="d-none django-error">
+                                    <td colspan="2">{{ error }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-success">Iniciar sesion</button>
+        </div>
+    </form>
+      <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        {# Puedes añadir un icono pequeño aquí si quieres #}
+        {# <img src="..." class="rounded me-2" alt="..."> #}
+        <strong class="me-auto">Notificación</strong>
+        <small>Ahora</small> {# Puedes hacer esto dinámico si quieres #}
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        {# El mensaje del toast se insertará aquí mediante JavaScript #}
+      </div>
+    </div>
+  </div>
+  {# --- Fin del Contenedor de Toasts --- #}
+
+
+  {# --- Scripts condicionales para llamar a la función showToast --- #}
+  {# Estos scripts se ejecutarán en el navegador si la condición Django es verdadera #}
+
+  {% if form.errors %}
+    <script>
+      // Espera a que el DOM esté listo para asegurar que showToast esté definida
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof showToast === 'function') {
+          showToast("Tu nombre de usuario o contraseña son incorrectos. Inténtalo de nuevo.", "error");
+        } else {
+           console.error("La función showToast no está definida.");
+        }
+      });
+    </script>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          if (typeof showToast === 'function') {
+            showToast("Tu cuenta no tiene acceso a esta página. Inicia sesión con una cuenta que tenga acceso.", "warning");
+          } else {
+            console.error("La función showToast no está definida.");
+          }
+        });
+      </script>
+    {% else %}
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          if (typeof showToast === 'function') {
+            showToast("Por favor, inicia sesión para ver esta página.", "info");
+          } else {
+            console.error("La función showToast no está definida.");
+          }
+        });
+      </script>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

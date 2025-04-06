@@ -1,6 +1,6 @@
 from datetime import date
-
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from .models import *
 
 # class especialidadesForm(forms.ModelForm):
@@ -126,3 +126,14 @@ class pacienteForm(forms.ModelForm):
         if Paciente.objects.filter(ci = ci).exists():
             raise forms.ValidationError("Este número de cédula ya está registrado.")
         return ci
+
+
+class CustomLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update(
+            {'class': 'form-control m-2', 'placeholder': 'Nombre de usuario'}
+        )
+        self.fields['password'].widget.attrs.update(
+            {'class': 'form-control m-2', 'placeholder': 'Contraseña'}
+        )

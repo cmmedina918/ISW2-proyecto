@@ -1,4 +1,3 @@
-from datetime import date
 
 from django.contrib.auth.decorators import login_required, login_not_required
 from django.db.models.functions import Concat
@@ -34,13 +33,13 @@ def nuevoTurno(request):
 @login_required
 def turnosPendientesView(request):
     medico_actual = request.user.id
-    turnosList = Turno.objects.all().filter(status=0, medico__turno = medico_actual).order_by('fecha_turno')
+    turnosList = Turno.objects.all().filter(status = 0, medico_id = medico_actual ).order_by('fecha_turno')
     return render(request, 'turnosPendientes.html', {'turnos': turnosList})
 
 @login_required
 def turnosFinalizadosView(request):
     medico_actual = request.user.id
-    turnosList = Turno.objects.all().filter(status=1, medico__turno = medico_actual).order_by('fecha_turno')
+    turnosList = Turno.objects.all().filter(status=1, medico_id = medico_actual).order_by('fecha_turno')
     return render(request, 'turnosFinalizados.html', {'turnos': turnosList})
 
 @login_required
